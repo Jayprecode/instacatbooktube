@@ -1,0 +1,45 @@
+module.exports = {
+    env: {
+        browser: true,
+        es2021: true,
+        node: true,
+    },
+    extends: [
+        "plugin:react/recommended",
+        "plugin:import/recommended",
+        "airbnb",
+        "prettier",
+        "plugin:prettier/recommended",
+        "plugin:@next/next/recommended",
+    ],
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaFeatures: {
+            tsx: true,
+        },
+        ecmaVersion: 12,
+        sourceType: "module",
+    },
+    plugins: ["react", "prettier"],
+    rules: {
+        "prettier/prettier": ["error", { endOfLine: "auto" }],
+        "react/jsx-filename-extension": [1, { extensions: [".ts", ".tsx"] }],
+        "arrow-body-style": [1, "as-needed"],
+        "prefer-arrow-callback": "off",
+        "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
+        "react/forbid-prop-types": [0],
+        "react/require-default-props": [0],
+        "react/jsx-props-no-spreading": [0],
+        "no-nested-ternary": [0],
+        "no-script-url": [0],
+        "no-console": [0],
+        "jsx-a11y/click-events-have-key-events": [0],
+        "jsx-a11y/no-static-element-interactions": [0],
+        "import/no-unresolved": [0],
+    },
+    settings: {
+        react: {
+            version: "latest",
+        },
+    },
+};
