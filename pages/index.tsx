@@ -3,13 +3,14 @@
 /* -------------------------------------------------------------------------- */
 import React, { useReducer, useRef, useEffect } from "react";
 import type { NextPage } from "next";
+import { Spinner } from "react-bootstrap";
 
 /* -------------------------------------------------------------------------- */
 /*                            Internal Dependencies                           */
 /* -------------------------------------------------------------------------- */
 
 import { useInfiniteScroll, useLazyLoading } from "hooks/is-io";
-import { Spinner } from "react-bootstrap";
+import Layout, { Wrapper } from "components/Layout";
 
 const Home: NextPage = () => {
     // make API calls and pass the returned data via dispatch
@@ -60,42 +61,40 @@ const Home: NextPage = () => {
     useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
 
     return (
-        <>
-            <div id="images" className="container">
-                <div className="row">
+        <Layout title="Home">
+            <Wrapper>
+                <div id="images">
                     {imgData.images.map((image, index) => {
                         // eslint-disable-next-line camelcase
                         const { author, download_url } = image;
                         return (
                             // eslint-disable-next-line react/no-array-index-key
-                            <div key={index} className="card">
-                                <div className="card-body ">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        alt={author}
-                                        // eslint-disable-next-line camelcase
-                                        data-src={download_url}
-                                        className="card-img-top"
-                                        src="https://picsum.photos/id/870/300/300?grayscale&blur=2"
-                                    />
-                                </div>
+                            <div key={index} className="mb-3">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    alt={author}
+                                    // eslint-disable-next-line camelcase
+                                    data-src={download_url}
+                                    className="card-img-top"
+                                    src="https://picsum.photos/id/870/300/300?grayscale&blur=2"
+                                />
                             </div>
                         );
                     })}
                 </div>
-            </div>
 
-            {imgData.fetching && (
-                <div className="text-center m-auto p-3">
-                    <Spinner animation="grow" variant="success" />
-                </div>
-            )}
-            <div
-                id="page-bottom-boundary"
-                style={{ border: "1px solid red" }}
-                ref={bottomBoundaryRef}
-            />
-        </>
+                {imgData.fetching && (
+                    <div className="text-center m-auto p-3">
+                        <Spinner animation="grow" variant="success" />
+                    </div>
+                )}
+                <div
+                    id="page-bottom-boundary"
+                    style={{ border: "1px solid red" }}
+                    ref={bottomBoundaryRef}
+                />
+            </Wrapper>
+        </Layout>
     );
 };
 
