@@ -81,6 +81,62 @@ const GlobalStyle = createGlobalStyle`
         opacity: 0;
         transition: opacity 300ms;
     }
+    .brown {
+        color: #cc8862 !important;
+        border: 1px solid #cc8862;
+        background: #ffffff;
+        animation: shake 0.5s;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #cc8862 !important;
+        }
+    }
+    .green {
+        color: #62cc6d;
+        border: 1px solid #d3f8db;
+        background: #ffffff;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #d3f8db !important;
+        }
+    }
+    .full_green {
+        color: #62cc6d;
+        border: 1px solid #d3f8db;
+        background: #d3f8db;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: #d3f8db !important;
+        }
+    }
+    .grayed-out {
+        color: #858585;
+        border: 1px solid #e7e7e7;
+        background: #d3f8db;
+    }
+    @keyframes shake {
+        0% {
+            transform: translate(0);
+        }
+        20% {
+            transform: translate(3em);
+        }
+        40% {
+            transform: translate(-3em);
+        }
+        60% {
+            transform: translate(3em);
+        }
+        80% {
+            transform: translate(-3em);
+        }
+        100% {
+            transform: translate(0);
+        }
+    }
 `;
 
 export default GlobalStyle;

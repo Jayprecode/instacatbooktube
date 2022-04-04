@@ -2,7 +2,6 @@
 /*                            External Dependencies                           */
 /* -------------------------------------------------------------------------- */
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 /* -------------------------------------------------------------------------- */
 /*                            Internal Dependencies                           */
@@ -11,14 +10,15 @@ import styled from "styled-components";
 const B = styled.div`
     position: relative;
     .btn {
-        padding: 0.9rem 1.1rem;
+        padding: 1rem 1.1rem;
         font-size: 1rem;
         line-height: 1rem;
         border-radius: 4px;
-        font-family: NeurialGrotesk-Light !important;
         font-weight: 400 !important;
         display: flex;
         align-items: center;
+        justify-content: center;
+        width: 100%;
         &:focus {
             box-shadow: none;
         }
@@ -50,7 +50,7 @@ const B = styled.div`
     }
 `;
 
-const Button = ({ label, svg, variant, type, ...rest }) => (
+const Button = ({ label, variant, type, ...rest }: any) => (
     <B {...rest}>
         <button
             // eslint-disable-next-line react/button-has-type
@@ -67,12 +67,5 @@ const Button = ({ label, svg, variant, type, ...rest }) => (
         </button>
     </B>
 );
-
-Button.propTypes = {
-    label: PropTypes.string,
-    svg: PropTypes.node,
-    variant: PropTypes.string,
-    type: PropTypes.string,
-};
 
 export default Button;

@@ -10,32 +10,23 @@ const StyledInput = styled(Form.Control)`
     font-size: 14px;
     line-height: 16px;
     font-weight: 400;
-    color: #3e3e3e;
-    .brown {
-        color: #cc8862;
-        border: 1px solid #cc8862;
-        background: #ffffff;
-    }
-    .green {
-        color: #62cc6d;
-        border: 1px solid #d3f8db;
-        background: #ffffff;
-    }
-    .full_green {
-        color: #62cc6d;
-        border: 1px solid #d3f8db;
-        background: #d3f8db;
-    }
-    .grayed-out {
-        color: #858585;
+    height: 40px;
+    text-align: left;
+    width: 100%;
+    .input {
+        color: #3e3e3e;
         border: 1px solid #e7e7e7;
-        background: #d3f8db;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border-color: #e7e7e7;
     }
 `;
 
-const index = ({ type, variant, className, children, ...rest }: any) => (
+const Input = ({ variant, ...rest }: any) => (
     <StyledInput
-        type={type}
+        type="text"
         className={`${
             variant === "invalid"
                 ? "brown"
@@ -46,9 +37,9 @@ const index = ({ type, variant, className, children, ...rest }: any) => (
                 : variant === "disabled"
                 ? "grayed-out"
                 : ""
-        } btn`}
+        } input`}
         {...rest}
     />
 );
 
-export default index;
+export default Input;
