@@ -21,6 +21,8 @@
     "strict": true,
     "target": "esnext",
     "baseUrl": "./",
+    "noImplicitReturns": true,
+    "noImplicitAny": false,
     "incremental": true
   },
   "exclude": [

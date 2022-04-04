@@ -4,16 +4,19 @@
 import React from "react";
 import type { AppProps } from "next/app";
 import Router from "next/router";
+import { positions, Provider as AlertProvider, transitions } from "react-alert";
 
 // nprogress
 import Nprogress from "nprogress";
 import "nprogress/nprogress.css";
-
+import "normalize.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 /* -------------------------------------------------------------------------- */
 /*                             Internal Dependency                            */
 /* -------------------------------------------------------------------------- */
 
 import GlobalStyle from "styles/Global";
+import AlertTemplate from "components/AlertTemplate";
 
 const TIMEOUT = 150;
 
@@ -52,10 +55,20 @@ Router.events.on("routeChangeError", () => {
 });
 //
 
+const options = {
+    position: positions.TOP_CENTER,
+    timeout: 4000,
+    offset: "30px",
+    transition: transitions.SCALE,
+};
+
 const MyApp = ({ Component, pageProps }: AppProps) => (
     <>
         <GlobalStyle />
-        <Component {...pageProps} />
+        {/* @ts-ignore */}
+        <AlertProvider template={AlertTemplate} {...options}>
+            <Component {...pageProps} />
+        </AlertProvider>
     </>
 );
 

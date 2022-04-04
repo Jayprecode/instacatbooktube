@@ -10,3 +10,4 @@ README.md
 *.md
 .github
 .prettierrc
+.eslintrc

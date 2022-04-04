@@ -44,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
     html,body {
         overflow-x: hidden;
         background-color: var(--c-black1);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        font-family: Roboto, sans-serif;
         font-size: 16px;
     }
     body {
