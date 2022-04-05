@@ -8,8 +8,7 @@ import Helmet from "react-helmet";
 
 /* -------------------------- Internal Dependencies ------------------------- */
 import SkipToMain from "components/A11y/skip-to-main";
-
-// import Header from "../Header";
+import Header from "components/Header";
 
 interface Props {
     title: string;
@@ -33,7 +32,7 @@ const Layout: React.FC<Props> = ({ children, title }) => (
             />
         </Helmet>
         <SkipToMain content="main-content" />
-        {/* <Header toggle={toggle} /> */}
+        <Header />
         {children}
     </Main>
 );

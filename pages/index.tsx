@@ -1,18 +1,56 @@
 /* -------------------------------------------------------------------------- */
 /*                            External Dependencies                           */
 /* -------------------------------------------------------------------------- */
-import React, { useReducer, useRef, useEffect } from "react";
+import React, { useReducer, useRef, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { Spinner } from "react-bootstrap";
-
+import styled from "styled-components";
 /* -------------------------------------------------------------------------- */
 /*                            Internal Dependencies                           */
 /* -------------------------------------------------------------------------- */
 
 import { useInfiniteScroll, useLazyLoading } from "hooks/is-io";
 import Layout, { Wrapper } from "components/Layout";
+import ImageList from "components/ImageList";
+
+const WrapperContainer = styled(Wrapper)`
+    margin-top: 4rem;
+`;
+
+// interface IFav {
+//     id: number;
+// }
 
 const Home: NextPage = () => {
+    const [favorites, setFavorites] = useState([]);
+
+    useEffect(() => {
+        // Get data favorites from the local storage
+        const dataInstorage = localStorage.getItem("favorites");
+
+        const getArray = () => {
+            if (dataInstorage) {
+                return JSON.parse(dataInstorage);
+            }
+            return [];
+        };
+        const fav = getArray();
+        if (fav.length !== 0) {
+            // @ts-ignore
+            setFavorites([...fav]);
+        }
+    }, []);
+    // Get data favorites from the local storage
+
+    const addFav = (image) => {
+        const newFav = [...favorites, image];
+        // @ts-ignore
+        setFavorites(newFav);
+
+        // Local Storage
+        localStorage.setItem("favorites", JSON.stringify(newFav));
+    };
+
     // make API calls and pass the returned data via dispatch
     const useFetch = (data, dispatch) => {
         useEffect(() => {
@@ -62,27 +100,9 @@ const Home: NextPage = () => {
 
     return (
         <Layout title="Home">
-            <Wrapper>
-                <div id="images">
-                    {imgData.images.map((image, index) => {
-                        // eslint-disable-next-line camelcase
-                        const { author, download_url } = image;
-                        return (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <div key={index} className="mb-3">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    alt={author}
-                                    // eslint-disable-next-line camelcase
-                                    data-src={download_url}
-                                    className="card-img-top"
-                                    src="https://picsum.photos/id/870/300/300?grayscale&blur=2"
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-
+            <WrapperContainer>
+                {/* @ts-ignore */}
+                <ImageList cats={imgData.images} add={addFav} />
                 {imgData.fetching && (
                     <div className="text-center m-auto p-3">
                         <Spinner animation="grow" variant="success" />
@@ -93,7 +113,7 @@ const Home: NextPage = () => {
                     style={{ border: "1px solid red" }}
                     ref={bottomBoundaryRef}
                 />
-            </Wrapper>
+            </WrapperContainer>
         </Layout>
     );
 };
