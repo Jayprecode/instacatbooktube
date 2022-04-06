@@ -4,14 +4,26 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 /* -------------------------------------------------------------------------- */
 /*                            Internal Dependencies                           */
 /* -------------------------------------------------------------------------- */
 import HeartIcon from "components/Icons/HeartIcon";
 import Layout, { Wrapper } from "components/Layout";
 
-const WrapperContainer = styled(Wrapper)`
+const WrapperContainerFav = styled(Wrapper)`
     margin-top: 4rem;
+    .mb-3 {
+        position: relative;
+        .btn {
+            background: #62cc6d;
+            border-radius: 4px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            margin: 1rem;
+        }
+    }
 `;
 
 const Favorites = () => {
@@ -41,32 +53,32 @@ const Favorites = () => {
         // Local Storage
         localStorage.setItem("favorites", JSON.stringify(newFav));
     };
+
     return (
         <Layout title="favorites">
-            <WrapperContainer>
-                <div id="images">
+            <WrapperContainerFav>
+                <TransitionGroup id="images" className="mb-3">
                     {favorites.map((image) => {
                         const { author, download_url, id } = image;
-                        console.log(image);
                         return (
-                            // eslint-disable-next-line react/no-array-index-key
-                            <div key={id} className="mb-3">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    alt={author}
-                                    data-src={download_url}
-                                    className="card-img-top"
-                                    src={download_url}
-                                    // src="https://picsum.photos/id/870/300/300?grayscale&blur=2"
-                                />
-                                <div className="btn" onClick={() => removeFav(image)}>
-                                    <HeartIcon />
+                            <CSSTransition timeout={500} id={id} classNames="item">
+                                <div key={id} className="mb-3">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        alt={author}
+                                        data-src={download_url}
+                                        className="card-img-top"
+                                        src={download_url}
+                                    />
+                                    <div className="btn" onClick={() => removeFav(image)}>
+                                        <HeartIcon />
+                                    </div>
                                 </div>
-                            </div>
+                            </CSSTransition>
                         );
                     })}
-                </div>
-            </WrapperContainer>
+                </TransitionGroup>
+            </WrapperContainerFav>
         </Layout>
     );
 };

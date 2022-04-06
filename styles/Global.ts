@@ -67,20 +67,21 @@ const GlobalStyle = createGlobalStyle`
     .no-pointer-events {
         pointer-events: none;
     }
-    .page-transition-enter {
-        opacity: 0;
+    .item-enter {
+        transform: translateX(100%);
     }
-    .page-transition-enter-active {
-        opacity: 1;
-        transition: opacity 300ms;
+    .item-enter-active {
+        transform: translateX(0);
+        transition:all 1s ease;
+    }      
+    
+    .item-exit {
+        transform: translateX(0);
     }
-    .page-transition-exit {
-        opacity: 1;
-    }
-    .page-transition-exit-active {
-        opacity: 0;
-        transition: opacity 300ms;
-    }
+    .item-exit-active {
+        transform: translateX(-100%);
+        transition:all 1s ease;
+    } 
     .brown {
         color: #cc8862 !important;
         border: 1px solid #cc8862;

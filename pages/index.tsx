@@ -15,11 +15,18 @@ import ImageList from "components/ImageList";
 
 const WrapperContainer = styled(Wrapper)`
     margin-top: 4rem;
+    .mb-3 {
+        position: relative;
+        .btn {
+            background: #62cc6d;
+            border-radius: 4px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            margin: 1rem;
+        }
+    }
 `;
-
-// interface IFav {
-//     id: number;
-// }
 
 const Home: NextPage = () => {
     const [favorites, setFavorites] = useState([]);

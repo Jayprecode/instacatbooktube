@@ -18,6 +18,9 @@ interface Props {
 const Main = styled.main`
     height: 100vh;
     width: 100%;
+    @media (min-width: 680px) {
+        display: none;
+    }
 `;
 
 const Layout: React.FC<Props> = ({ children, title }) => (
