@@ -36,7 +36,7 @@ const Container = styled(Wrapper)`
     }
 `;
 
-const signin = () => {
+const SignIn = () => {
     const {
         values,
         handleChange,
@@ -91,4 +91,4 @@ const signin = () => {
     );
 };
 
-export default signin;
+export default SignIn;

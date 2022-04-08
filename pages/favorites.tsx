@@ -10,6 +10,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 /* -------------------------------------------------------------------------- */
 import HeartIcon from "components/Icons/HeartIcon";
 import Layout, { Wrapper } from "components/Layout";
+import withPrivateRoutes from "components/Hoc/withPrivateRoutes";
 
 const WrapperContainerFav = styled(Wrapper)`
     margin-top: 4rem;
@@ -83,4 +84,4 @@ const Favorites = () => {
     );
 };
 
-export default Favorites;
+export default withPrivateRoutes(Favorites);

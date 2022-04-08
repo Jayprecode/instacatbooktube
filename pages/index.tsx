@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { useInfiniteScroll, useLazyLoading } from "hooks/is-io";
 import Layout, { Wrapper } from "components/Layout";
 import ImageList from "components/ImageList";
+import withPrivateRoutes from "components/Hoc/withPrivateRoutes";
 
 const WrapperContainer = styled(Wrapper)`
     margin-top: 4rem;
@@ -30,7 +31,6 @@ const WrapperContainer = styled(Wrapper)`
 
 const Home: NextPage = () => {
     const [favorites, setFavorites] = useState([]);
-
     useEffect(() => {
         // Get data favorites from the local storage
         const dataInstorage = localStorage.getItem("favorites");
@@ -125,4 +125,4 @@ const Home: NextPage = () => {
     );
 };
 
-export default Home;
+export default withPrivateRoutes(Home);
