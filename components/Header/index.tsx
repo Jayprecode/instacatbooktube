@@ -31,14 +31,32 @@ const index = () => {
     const router = useRouter();
     return (
         <HeaderContainer>
-            <div className="log-out">
-                <LogoutIcon />
-            </div>
-            <h4 className="brand-name">Instacatbooktube</h4>
-            {/* @ts-ignore */}
-            <div className="favorites" type="button" onClick={() => router.push("/favorites")}>
-                <HeartMultipleIcon />
-            </div>
+            {router.pathname.includes("/auth/signin") ? (
+                ""
+            ) : (
+                <>
+                    <button
+                        className="log-out btn"
+                        type="button"
+                        onClick={() => {
+                            localStorage.clear();
+                            router.push("/auth/signin");
+                        }}
+                    >
+                        <LogoutIcon />
+                    </button>
+                    <h4 className="brand-name">Instacatbooktube</h4>
+                    {/* @ts-ignore */}
+                    <div
+                        className="favorites"
+                        /* @ts-ignore */
+                        type="button"
+                        onClick={() => router.push("/favorites")}
+                    >
+                        <HeartMultipleIcon />
+                    </div>
+                </>
+            )}
         </HeaderContainer>
     );
 };

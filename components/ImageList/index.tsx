@@ -1,6 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                            External Dependencies                           */
 /* -------------------------------------------------------------------------- */
+// @ts-nocheck
 import React from "react";
 // import styled from "styled-components";
 import HeartOutlinedIcon from "components/Icons/HeartOutlinedIcon";
@@ -9,28 +10,29 @@ import HeartIcon from "components/Icons/HeartIcon";
 const index: React.FC = ({ cats, add }: any) => (
     <div>
         {cats.map((image) => {
-            const { author, download_url, id } = image;
-            // Get data favorites from the local storage
-            const dataInstorage = localStorage.getItem("favorites");
-            const getArray = (): [] => {
-                if (dataInstorage) {
-                    return JSON.parse(dataInstorage);
-                }
-                return [];
-            };
-            // @ts-ignore
-            const isFav = getArray().findIndex((fav) => fav.id === image.id) !== -1;
-
+            const { url, id, isFav } = image;
             return (
-                <div key={id} className="mb-3">
+                <div
+                    key={id}
+                    className="mb-3"
+                    style={{
+                        minHeight: "300px",
+                    }}
+                >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                        alt={author}
-                        data-src={download_url}
+                        alt={id}
+                        loading="lazy"
+                        data-src={url}
                         className="card-img-top"
-                        src={download_url}
+                        src="https://picsum.photos/10"
                     />
-                    <div className="btn" onClick={() => add(image)}>
+                    <div
+                        className="btn"
+                        onClick={() => {
+                            add(image);
+                        }}
+                    >
                         {isFav ? <HeartIcon /> : <HeartOutlinedIcon />}
                     </div>
                 </div>

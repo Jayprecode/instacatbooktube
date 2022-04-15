@@ -10,7 +10,9 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 /* -------------------------------------------------------------------------- */
 import HeartIcon from "components/Icons/HeartIcon";
 import Layout, { Wrapper } from "components/Layout";
-import withPrivateRoutes from "components/Hoc/withPrivateRoutes";
+import useCheckAuthStatus from "hooks/useCheckStatus";
+import { useLazyLoading } from "hooks/is-io";
+import config from "../config";
 
 const WrapperContainerFav = styled(Wrapper)`
     margin-top: 4rem;
@@ -29,49 +31,56 @@ const WrapperContainerFav = styled(Wrapper)`
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
-
+    useCheckAuthStatus();
     useEffect(() => {
-        // Get data favorites from the local storage
-        const dataInstorage = localStorage.getItem("favorites");
-        const getArray = () => {
-            if (dataInstorage) {
-                return JSON.parse(dataInstorage);
-            }
-            return [];
-        };
-        const fav = getArray();
-        if (fav.length !== 0) {
+        fetch(`${config().baseUrl}/favourites`, {
+            method: "GET",
             // @ts-ignore
-            setFavorites([...fav]);
-        }
+            headers: {
+                ...config().headers,
+            },
+        })
+            // eslint-disable-next-line no-shadow
+            .then((data) => data.json())
+            .then((data) => setFavorites(data));
     }, []);
 
     const removeFav = (image) => {
-        // @ts-ignore
-        const newFav = favorites.filter((fav) => fav.id !== image.id);
-        setFavorites(newFav);
-
-        // Local Storage
-        localStorage.setItem("favorites", JSON.stringify(newFav));
+        fetch(`${config().baseUrl}/favourites/${image.id}`, {
+            method: "DELETE",
+            // @ts-ignore
+            headers: {
+                ...config().headers,
+            },
+        })
+            .then((data) => data.json())
+            .then(() => {
+                const favouritedImages = favorites.filter(({ id }) => {
+                    return image.id !== id;
+                });
+                const newState = [...favouritedImages];
+                setFavorites(newState);
+            });
     };
-
+    useLazyLoading(".card-img-top", favorites);
     return (
         <Layout title="favorites">
             <WrapperContainerFav>
                 <TransitionGroup id="images" className="mb-3">
-                    {favorites.map((image) => {
-                        const { author, download_url, id } = image;
+                    {favorites.map((favorite) => {
+                        const { id, image } = favorite;
                         return (
-                            <CSSTransition timeout={500} id={id} classNames="item">
+                            <CSSTransition timeout={500} key={id} classNames="item">
                                 <div key={id} className="mb-3">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        alt={author}
-                                        data-src={download_url}
+                                        alt={id}
+                                        // @ts-ignore
+                                        data-src={image.url}
                                         className="card-img-top"
-                                        src={download_url}
+                                        src="https://picsum.photos/10"
                                     />
-                                    <div className="btn" onClick={() => removeFav(image)}>
+                                    <div className="btn" onClick={() => removeFav(favorite)}>
                                         <HeartIcon />
                                     </div>
                                 </div>
@@ -84,4 +93,4 @@ const Favorites = () => {
     );
 };
 
-export default withPrivateRoutes(Favorites);
+export default Favorites;

@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { object, string } from "yup";
 import Layout, { Wrapper } from "components/Layout";
 import { Form } from "react-bootstrap";
+import { useRouter } from "next/router";
 
 /* -------------------------- Internal Dependencies ------------------------- */
 import Input from "components/Forms/Input";
@@ -37,6 +38,7 @@ const Container = styled(Wrapper)`
 `;
 
 const SignIn = () => {
+    const router = useRouter();
     const {
         values,
         handleChange,
@@ -53,8 +55,9 @@ const SignIn = () => {
         validationSchema: object().shape({
             apiKey: string().required("ApiKey is required!"),
         }),
-        onSubmit: async (formData, { setSubmitting }) => {
-            setSubmitting(true);
+        onSubmit: (formData) => {
+            localStorage.setItem("apiKey", formData.apiKey);
+            router.push("/");
         },
     });
     return (
@@ -83,7 +86,7 @@ const SignIn = () => {
                         disabled={!isValid || isSubmitting}
                         isLoading={isSubmitting}
                         variant=""
-                        type="button"
+                        type="submit"
                     />
                 </Form>
             </Container>

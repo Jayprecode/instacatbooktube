@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                            External Dependencies                           */
 /* -------------------------------------------------------------------------- */
-import React, { useReducer, useRef, useEffect, useState } from "react";
+import React, { useReducer, useRef, useEffect } from "react";
 import type { NextPage } from "next";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
@@ -12,7 +12,9 @@ import styled from "styled-components";
 import { useInfiniteScroll, useLazyLoading } from "hooks/is-io";
 import Layout, { Wrapper } from "components/Layout";
 import ImageList from "components/ImageList";
-import withPrivateRoutes from "components/Hoc/withPrivateRoutes";
+
+import useCheckAuthStatus from "hooks/useCheckStatus";
+import config from "../config";
 
 const WrapperContainer = styled(Wrapper)`
     margin-top: 4rem;
@@ -30,42 +32,23 @@ const WrapperContainer = styled(Wrapper)`
 `;
 
 const Home: NextPage = () => {
-    const [favorites, setFavorites] = useState([]);
-    useEffect(() => {
-        // Get data favorites from the local storage
-        const dataInstorage = localStorage.getItem("favorites");
-
-        const getArray = () => {
-            if (dataInstorage) {
-                return JSON.parse(dataInstorage);
-            }
-            return [];
-        };
-        const fav = getArray();
-        if (fav.length !== 0) {
-            // @ts-ignore
-            setFavorites([...fav]);
-        }
-    }, []);
-    // Get data favorites from the local storage
-
-    const addFav = (image) => {
-        const newFav = [...favorites, image];
-        // @ts-ignore
-        setFavorites(newFav);
-
-        // Local Storage
-        localStorage.setItem("favorites", JSON.stringify(newFav));
-    };
+    useCheckAuthStatus();
 
     // make API calls and pass the returned data via dispatch
     const useFetch = (data, dispatch) => {
         useEffect(() => {
             dispatch({ type: "FETCHING_IMAGES", fetching: true });
-            fetch(`https://picsum.photos/v2/list?page=${data.page}&limit=2`)
+            fetch(`${config().baseUrl}/images/search`, {
+                method: "GET",
+                // @ts-ignore
+                headers: {
+                    ...config().headers,
+                },
+            })
                 // eslint-disable-next-line no-shadow
                 .then((data) => data.json())
                 .then((images) => {
+                    // console.log(images);
                     dispatch({ type: "STACK_IMAGES", images });
                     dispatch({ type: "FETCHING_IMAGES", fetching: false });
                 })
@@ -83,6 +66,8 @@ const Home: NextPage = () => {
                 return { ...state, images: state.images.concat(action.images) };
             case "FETCHING_IMAGES":
                 return { ...state, fetching: action.fetching };
+            case "SET_FAVORITES":
+                return { ...state, images: action.images };
             default:
                 return state;
         }
@@ -105,6 +90,27 @@ const Home: NextPage = () => {
     useLazyLoading(".card-img-top", imgData.images);
     useInfiniteScroll(bottomBoundaryRef, pagerDispatch);
 
+    const addFav = (image) => {
+        fetch(`${config().baseUrl}/favourites`, {
+            method: "POST",
+            // @ts-ignore
+            headers: {
+                ...config().headers,
+            },
+            body: JSON.stringify({
+                "image_id": image.id,
+            }),
+        })
+            .then((data) => data.json())
+            .then(() => {
+                const favouritedImages = imgData.images.find(({ id }) => {
+                    return image.id === id;
+                });
+                favouritedImages.isFav = true;
+                const newState = [...imgData.images];
+                imgDispatch({ type: "SET_FAVORITES", images: newState });
+            });
+    };
     return (
         <Layout title="Home">
             <WrapperContainer>
@@ -125,4 +131,4 @@ const Home: NextPage = () => {
     );
 };
 
-export default withPrivateRoutes(Home);
+export default Home;
