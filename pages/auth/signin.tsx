@@ -43,7 +43,7 @@ const SignIn = () => {
         values,
         handleChange,
         handleBlur,
-        // errors,
+        errors,
         // touched,
         handleSubmit,
         isValid,
@@ -53,7 +53,14 @@ const SignIn = () => {
             apiKey: "",
         },
         validationSchema: object().shape({
-            apiKey: string().required("ApiKey is required!"),
+            apiKey: string()
+                .required("ApiKey is required!")
+                .test("apiKey", "ApiKey is invalid!", (value) => {
+                    const regex =
+                        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+                    // @ts-ignore
+                    return regex.test(value);
+                }),
         }),
         onSubmit: (formData) => {
             localStorage.setItem("apiKey", formData.apiKey);
@@ -77,15 +84,16 @@ const SignIn = () => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.apiKey}
-                            variant=""
+                            variant={errors.apiKey ? "inValid" : "submitting"}
                             placeholder="Enter your ApiKey..."
                         />
+                        {console.log(errors)}
                     </Form.Group>
                     <Button
                         label="Sign In"
                         disabled={!isValid || isSubmitting}
                         isLoading={isSubmitting}
-                        variant=""
+                        variant={!errors.apiKey ? "dg" : ""}
                         type="submit"
                     />
                 </Form>

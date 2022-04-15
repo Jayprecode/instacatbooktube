@@ -28,7 +28,7 @@ const Input = ({ variant, ...rest }: any) => (
     <StyledInput
         type="text"
         className={`${
-            variant === "invalid"
+            variant === "inValid"
                 ? "brown"
                 : variant === "valid"
                 ? "green"
